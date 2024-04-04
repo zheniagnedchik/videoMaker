@@ -22,7 +22,7 @@ def download_image(url):
 def send_post_request(data):
     headers = {'Content-Type': 'application/json'}
     response = requests.post(
-        "http://localhost:3000/create_video", data=json.dumps(data), headers=headers)
+        "http://143.110.149.184/create_video", data=json.dumps(data), headers=headers)
     return response
 
 
