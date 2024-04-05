@@ -27,6 +27,7 @@ def send_post_request(data):
 
 
 def process_video(video_path, image_url, output_path):
+    print(cv2.getBuildInformation())
     lower_hsv = np.array([144 - 10, 100, 100])
     upper_hsv = np.array([144 + 10, 255, 199])
 
