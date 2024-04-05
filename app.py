@@ -80,10 +80,11 @@ def process_and_download():
     video_path = 'test.mp4'
     image_url = request.json.get('image_url')
     folderId = request.json.get('folder_id')
+    name = request.json.get('name')
     if not image_url:
         return "Image URL is required", 400
     image_url_index = image_url[0]
-    output_path = 'processed_video.mp4'
+    output_path = f"{name}.webm"
     try:
         full_output_path = process_video(
             video_path, image_url_index, output_path)
