@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, send_file
 import cv2
 import numpy as np
 import requests
@@ -65,6 +65,13 @@ def process_video(video_path, image_url, output_path):
     cap.release()
     out.release()
     return full_output_path
+
+
+@app.route('/videos/<path:filename>')
+def get_video(filename):
+    videos_dir = '/var/www/videoMaker/videos/'
+    full_path = os.path.join(videos_dir, filename)
+    return send_file(full_path, mimetype='video/mp4')
 
 
 @app.route('/process', methods=['POST'])
