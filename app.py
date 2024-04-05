@@ -41,7 +41,7 @@ def process_video(video_path, image_url, output_path):
 
     full_output_path = os.path.join(videos_dir, output_path)
     out = cv2.VideoWriter(full_output_path, cv2.VideoWriter_fourcc(
-        *'XVID'), 20.0, (frame_width, frame_height))
+        *'mp4v'), 20.0, (frame_width, frame_height))
 
     insert_image = download_image(image_url)
 
