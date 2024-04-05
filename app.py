@@ -8,6 +8,8 @@ import uuid
 
 app = Flask(__name__)
 
+app.logger.info(cv2.getBuildInformation())
+
 
 def download_image(url):
     response = requests.get(url)
