@@ -92,7 +92,7 @@ def process_and_download():
             "folderId": folderId
         }
         send_post_request(video_data)
-        print(cv2.getBuildInformation())
+        print("piojhiyuy")
         return f"Video processed successfully. Saved to {full_output_path}. Document inserted into RavenDB."
     except Exception as e:
         return str(e), 500
