@@ -34,13 +34,13 @@ def process_video(video_path, image_url, output_path):
     frame_width = int(cap.get(3))
     frame_height = int(cap.get(4))
 
-    videos_dir = 'videos'
+    videos_dir = '/var/www/videoMaker/videos/'
     if not os.path.exists(videos_dir):
         os.makedirs(videos_dir)
 
     full_output_path = os.path.join(videos_dir, output_path)
     out = cv2.VideoWriter(full_output_path, cv2.VideoWriter_fourcc(
-        *'MP4V'), 20.0, (frame_width, frame_height))
+        *'H264'), 20.0, (frame_width, frame_height))
 
     insert_image = download_image(image_url)
 
