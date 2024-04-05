@@ -9,11 +9,6 @@ import uuid
 app = Flask(__name__)
 
 
-@app.before_first_request
-def log_opencv_info():
-    app.logger.info(cv2.getBuildInformation())
-
-
 def download_image(url):
     response = requests.get(url)
     if response.status_code == 200:
