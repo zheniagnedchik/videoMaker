@@ -89,7 +89,7 @@ def process_and_download():
         full_output_path = process_video(
             video_path, image_url_index, output_path)
         video_data = {
-            "link": full_output_path,
+            "link": name,
             "folderId": folderId
         }
         send_post_request(video_data)
