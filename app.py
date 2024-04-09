@@ -5,6 +5,7 @@ import requests
 import os
 import json
 import uuid
+import subprocess
 
 app = Flask(__name__)
 
@@ -36,6 +37,7 @@ def process_video(video_path, image_url, output_path):
     frame_height = int(cap.get(4))
 
     videos_dir = '/var/www/videoMaker/videos/'
+    # videos_dir = 'videos/'
     if not os.path.exists(videos_dir):
         os.makedirs(videos_dir)
 
@@ -65,7 +67,12 @@ def process_video(video_path, image_url, output_path):
 
     cap.release()
     out.release()
-    return full_output_path
+    mp4_output_path = output_path.replace('.webm', '.mp4')
+    full_mp4_output_path = os.path.join(videos_dir, mp4_output_path)
+    convert_to_mp4(full_output_path, full_mp4_output_path)
+
+    return full_mp4_output_path
+    # return full_output_path
 
 
 @app.route('/videos/<path:filename>')
@@ -73,6 +80,12 @@ def get_video(filename):
     videos_dir = '/var/www/videoMaker/videos/'
     full_path = os.path.join(videos_dir, filename)
     return send_file(full_path, mimetype='video/mp4')
+
+
+def convert_to_mp4(input_path, output_path):
+    command = ['ffmpeg', '-i', input_path, '-vcodec',
+               'libx264', '-crf', '23', output_path]
+    subprocess.run(command, check=True)
 
 
 @app.route('/process', methods=['POST'])
@@ -85,6 +98,8 @@ def process_and_download():
         return "Image URL is required", 400
     image_url_index = image_url[0]
     output_path = f"{name}.webm"
+    # output_path = "webm.webm"
+
     try:
         full_output_path = process_video(
             video_path, image_url_index, output_path)
