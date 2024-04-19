@@ -180,7 +180,7 @@ def process_video(video_path, image_url, output_path):
 
     full_output_path = os.path.join(videos_dir, output_path)
     out = cv2.VideoWriter(full_output_path,
-                          cv2.VideoWriter_fourcc(*'XVID'), 20.0, (frame_width, frame_height))
+                          cv2.VideoWriter_fourcc(*'XVID'), 28.0, (frame_width, frame_height))
 
     while cap.isOpened():
         ret, frame = cap.read()
@@ -231,11 +231,20 @@ def convert_to_mp4(input_path, output_path):
 
 def add_audio_to_video(video_path, audio_path, output_path):
     ffmpeg_path = '/usr/bin/ffmpeg'
+    videos_dir = '/var/www/videoMaker/videos/'
+    # ffmpeg_path = '/opt/homebrew/bin/ffmpeg'
+    # Путь к директории 'videos/'
+    # videos_dir = 'videos/'
+    if not os.path.exists(videos_dir):
+        os.makedirs(videos_dir)
+    full_output_path = os.path.join(videos_dir, output_path)
+
     command = [
         ffmpeg_path, '-i', video_path, '-i', audio_path,
-        '-c:v', 'copy', '-c:a', 'aac', '-strict', 'experimental', output_path
+        '-c:v', 'copy', '-c:a', 'aac', '-strict', 'experimental', full_output_path
     ]
     subprocess.run(command, check=True)
+    return full_output_path
 
 
 @app.route('/process', methods=['POST'])
