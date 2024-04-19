@@ -93,7 +93,7 @@ def convert_to_mp4(input_path, output_path):
         output_path = f"{base}_converted{ext}"
 
     # Replace the placeholder below with the actual path to FFmpeg
-    ffmpeg_path = '/opt/homebrew/bin/ffmpeg'  # Example path on Linux
+    ffmpeg_path = '/usr/bin/ffmpeg'  # Example path on Linux
     command = [ffmpeg_path, '-i', input_path,
                '-vcodec', 'libx264', '-crf', '23', output_path]
     subprocess.run(command, check=True)
