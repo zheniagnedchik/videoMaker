@@ -229,24 +229,19 @@ def convert_to_mp4(input_path, output_path):
     return output_path
 
 
-def extract_audio(video_path, output_audio_path):
-    ffmpeg_path = '/usr/bin/ffmpeg'
-    command = [ffmpeg_path, '-i', video_path,
-               '-q:a', '0', '-map', 'a', output_audio_path]
-    subprocess.run(command, check=True)
-
-
 def add_audio_to_video(video_path, audio_path, output_path):
     ffmpeg_path = '/usr/bin/ffmpeg'
-    command = [ffmpeg_path, '-i', video_path, '-i', audio_path, '-c:v',
-               'copy', '-c:a', 'aac', '-strict', 'experimental', output_path]
+    command = [
+        ffmpeg_path, '-i', video_path, '-i', audio_path,
+        '-c:v', 'copy', '-c:a', 'aac', '-strict', 'experimental', output_path
+    ]
     subprocess.run(command, check=True)
 
 
-@app.route('/process', methods=['POST'])
 @app.route('/process', methods=['POST'])
 def process_and_download():
     video_path = 'test.mp4'
+    # Expecting a list of image URLs
     image_url = request.json.get('image_url')
     folder_id = request.json.get('folder_id')
     name = request.json.get('name')
@@ -255,19 +250,12 @@ def process_and_download():
         return "Three image URLs are required", 400
 
     output_path = f"{name}.mp4"
-    audio_path = f"{name}_audio.mp3"
-    final_output_path = f"{name}_final.mp4"
 
     try:
-        # Extract audio from the original video
-        extract_audio(video_path, audio_path)
-
-        # Process video with OpenCV
-        processed_video_path = process_video(
-            video_path, image_url, output_path)
-
-        # Add audio back to the processed video
-        add_audio_to_video(processed_video_path, audio_path, final_output_path)
+        audio_path = 'audio.mp3'
+        full_output_path = process_video(video_path, image_url, output_path)
+        final_output_path = f"{name}_final.mp4"
+        add_audio_to_video(full_output_path, audio_path, final_output_path)
 
         video_data = {
             "link": final_output_path,
@@ -275,7 +263,7 @@ def process_and_download():
         }
         send_post_request(video_data)
         app.logger.info(cv2.getBuildInformation())
-        return f"Video processed successfully. Saved to {final_output_path}. Document inserted into RavenDB."
+        return f"Video processed successfully. Saved to {full_output_path}. Document inserted into RavenDB."
     except Exception as e:
         return str(e), 500
 
