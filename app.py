@@ -37,7 +37,7 @@ def process_video(video_path, image_url, output_path):
     frame_height = int(cap.get(4))
 
     videos_dir = '/var/www/videoMaker/videos/'
-    videos_dir = 'videos/'
+    # videos_dir = 'videos/'
     if not os.path.exists(videos_dir):
         os.makedirs(videos_dir)
 
